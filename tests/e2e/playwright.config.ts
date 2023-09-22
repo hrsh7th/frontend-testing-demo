@@ -6,7 +6,7 @@ export default {
   timeout: 5 * 1000,
   testDir: join(__dirname, '../../src'),
   outputDir: 'test-report',
-  updateSnapshots: process.env.CI && !process.env.UPDATE_SNAPSHOTS ? 'none' : 'all',
+  updateSnapshots: process.env.UPDATE_SNAPSHOTS ? 'all' : 'missing',
   testMatch: '**/*.spec.tsx',
   retries: 1,
   snapshotPathTemplate: '{testDir}/__snapshots__/{testFilePath}/{arg}{ext}',

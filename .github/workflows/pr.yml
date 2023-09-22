@@ -62,11 +62,18 @@ jobs:
           path: ${{ github.workspace }}/tests/vrt/__snapshots__
 
       - name: Integration
+        id: integration
         continue-on-error: true
         run: |
           cd ${{ github.workspace }}
           npm ci
           npm run test
+          {
+            echo 'vrt_summary<<EOF'
+            export REPORT_URL="https://hrsh7th.github.io/frontend-testing-demo/${{ github.head_ref }}/vrt"
+            npx ts-node ${{ github.workspace }}/.github/scripts/create-vrt-summary.ts
+            echo EOF
+          } >> $GITHUB_OUTPUT
 
       - name: Sync storybook
         uses: ./.github/actions/sync-github-pages
@@ -98,4 +105,5 @@ jobs:
             https://hrsh7th.github.io/frontend-testing-demo/${{ github.head_ref }}/storybook
             #### Visual Regression
             https://hrsh7th.github.io/frontend-testing-demo/${{ github.head_ref }}/vrt
+            ${{ steps.integration.outputs.vrt_summary }}
 
