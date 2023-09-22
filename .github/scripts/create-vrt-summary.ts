@@ -10,7 +10,7 @@ report.suites.forEach(suite => {
           const isNotExists = spec.tests.some(test => {
             return test.results.some(result => result.error.message.startsWith('A snapshot doesn\'t exist'))
           })
-          console.log(`    - [${spec.title}](${process.env.REPORT_URL}?testId=${spec.id}&run=1)${isNotExists ? ' :sparkles:' : ''}`)
+          console.log(`    - [${spec.title}](${process.env.REPORT_URL}?testId=${spec.id}&anchor=diff&run=1)${isNotExists ? ' :sparkles:' : ''}`)
         }
       })
     }
