@@ -19,6 +19,9 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.action == 'closed' }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Sync storybook
         uses: ./.github/actions/sync-github-pages
         with:
