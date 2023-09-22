@@ -10,3 +10,11 @@ export default {
 
 export const Default: StoryObj<typeof Button> = {};
 
+export const Round: StoryObj<typeof Button> = {
+  args: {
+    style: {
+      borderRadius: '1rem'
+    }
+  }
+};
+
