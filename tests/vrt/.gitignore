@@ -1,0 +1,4 @@
+# We don't store the snapshots in the git history.
+# That should be stored to the Artifacts of GitHub Actions or AWS S3.
+__snapshots__
+

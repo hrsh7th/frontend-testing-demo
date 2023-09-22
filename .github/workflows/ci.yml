@@ -1,0 +1,52 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ci
+  cancel-in-progress: true
+
+jobs:
+  run:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node_modulesn: '>=20'
+          cache: npm
+
+      - name: Cache playwright
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright
+
+      - name: Integration
+        run: |
+          npm ci
+          UPDATE_SNAPSHOTS=1 npm run test
+
+      - name: Sync storybook
+        uses: ./.github/actions/sync-github-pages
+        with:
+          repository: hrsh7th/frontend-testing-demo
+          ref: gh-pages
+          source_path: ${{ github.workspace }}/storybook-static
+          deploy_path: ${{ github.ref_name }}/storybook
+          kind: Storybook
+          delete: false
+
+      - name: Upload vrt-snapshots
+        uses: actions/upload-artifact@v3
+        with:
+          name: vrt-snapshots
+          path: ${{ github.workspace }}/tests/vrt/__snapshots__
+

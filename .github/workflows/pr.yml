@@ -1,0 +1,97 @@
+name: pr
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - closed
+
+concurrency:
+  group: pr-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  cleanup:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    if: ${{ github.event.action == 'closed' }}
+    steps:
+      - name: Sync storybook
+        uses: ./.github/actions/sync-github-pages
+        with:
+          repository: hrsh7th/frontend-testing-demo
+          ref: gh-pages
+          source_path: ''
+          deploy_path: ${{ github.head_ref }}
+          kind: Cleanup
+          delete: true
+
+  run:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    if: ${{ github.event.action != 'closed' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node_modulesn: '>=20'
+          cache: npm
+
+      - name: Cache playwright
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright
+
+      - name: Download vrt-snapshots
+        continue-on-error: true
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: ci.yml
+          name: vrt-snapshots
+          path: ${{ github.workspace }}/tests/vrt/__snapshots__
+
+      - name: Integration
+        continue-on-error: true
+        run: |
+          cd ${{ github.workspace }}
+          npm ci
+          npm run test
+
+      - name: Sync storybook
+        uses: ./.github/actions/sync-github-pages
+        with:
+          repository: hrsh7th/frontend-testing-demo
+          ref: gh-pages
+          source_path: ${{ github.workspace }}/storybook-static
+          deploy_path: ${{ github.head_ref }}/storybook
+          kind: Storybook
+          delete: false
+
+      - name: Sync vrt
+        uses: ./.github/actions/sync-github-pages
+        with:
+          repository: hrsh7th/frontend-testing-demo
+          ref: gh-pages
+          source_path: ${{ github.workspace }}/tests/vrt/html-report
+          deploy_path: ${{ github.head_ref }}/vrt
+          kind: VRT
+          delete: false
+
+      - name: Information
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: "Information"
+          recreate: true
+          message: |
+            #### Storybook
+            https://hrsh7th.github.io/frontend-testing-demo/${{ github.head_ref }}/storybook
+            #### Visual Regression
+            https://hrsh7th.github.io/frontend-testing-demo/${{ github.head_ref }}/vrt
+
