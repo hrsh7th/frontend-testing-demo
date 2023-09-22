@@ -1,0 +1,68 @@
+name: Sync GitHub Pages
+description: Sync specific directory to GitHub Pages
+
+inputs:
+  repository:
+    description: Specify the repository url
+    required: true
+  ref:
+    description: Specify the `GitHub Pages` branch name
+    required: true
+  source_path:
+    description: Specify source directory
+    required: true
+  deploy_path:
+    description: Specify deploy directory
+    required: true
+  kind:
+    description: Specify heading text that describes what is synced
+    required: true
+  delete:
+    description: Specify whether to delete
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        repository: ${{ inputs.repository }}
+        ref: ${{ inputs.ref }}
+        path: sync-github-pages
+
+    - name: Deploy
+      if: ${{ inputs.delete != 'true' }}
+      shell: bash
+      run: |
+        cd ${GITHUB_WORKSPACE}/sync-github-pages
+        if [ -d ${{ inputs.deploy_path }} ]; then
+          rm -Rf ${{ inputs.deploy_path }}
+        fi
+        mkdir -p ${{ inputs.deploy_path }}
+        cp -R ${{ inputs.source_path }}/* ${{ inputs.deploy_path }}/
+        git config --global user.name ${GITHUB_ACTOR}
+        git config --global user.email ${GITHUB_ACTOR}@users.noreply.github.com
+        git add .
+        git commit -m "Sync GitHub Pages: Deploy: ${{ inputs.kind }}: ${{ inputs.deploy_path }}"
+        git push origin ${{ inputs.ref }}
+
+    - name: Delete
+      if: ${{ inputs.delete == 'true' }}
+      shell: bash
+      run: |
+        cd ${GITHUB_WORKSPACE}/sync-github-pages
+        if [ -d ${{ inputs.deploy_path }} ]; then
+          rm -Rf ${{ inputs.deploy_path }}
+          git config --global user.name ${GITHUB_ACTOR}
+          git config --global user.email ${GITHUB_ACTOR}@users.noreply.github.com
+          git add .
+          git commit -m "Sync GitHub Pages: Delete: ${{ inputs.kind }}: ${{ inputs.deploy_path }}"
+          git push origin ${{ inputs.ref }}
+        fi
+
+    - name: Cleanup repository
+      shell: bash
+      run: |
+        rm -Rf ${GITHUB_WORKSPACE}/sync-github-pages
+
