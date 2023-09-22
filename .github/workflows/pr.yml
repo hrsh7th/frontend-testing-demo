@@ -51,7 +51,7 @@ jobs:
         with:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright
-          restore-key: ${{ runner.os }}-playwright
+          restore-keys: ${{ runner.os }}-playwright
 
       - name: Download vrt-snapshots
         continue-on-error: true
