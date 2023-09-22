@@ -7,7 +7,7 @@
     "prepare:playwright": "playwright install --with-deps",
     "dev": "run-p dev:*",
     "dev:app": "next dev --experimental-test-proxy",
-    "dev:e2e": "playwright test --config tests/e2e/playwright.config.ts --ui",
+    "dev:e2e": "UPDATE_SNAPSHOTS=1 playwright test --config tests/e2e/playwright.config.ts --ui",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
