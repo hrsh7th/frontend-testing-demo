@@ -19,6 +19,9 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.action == 'closed' }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Sync storybook
         uses: ./.github/actions/sync-github-pages
         with:
@@ -48,6 +51,7 @@ jobs:
         with:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright
+          restore-keys: ${{ runner.os }}-playwright
 
       - name: Download vrt-snapshots
         continue-on-error: true
@@ -58,11 +62,18 @@ jobs:
           path: ${{ github.workspace }}/tests/vrt/__snapshots__
 
       - name: Integration
+        id: integration
         continue-on-error: true
         run: |
           cd ${{ github.workspace }}
           npm ci
           npm run test
+          {
+            echo 'vrt_summary<<EOF'
+            export REPORT_URL="https://hrsh7th.github.io/frontend-testing-demo/${{ github.head_ref }}/vrt"
+            npx ts-node ${{ github.workspace }}/.github/scripts/create-vrt-summary.ts
+            echo EOF
+          } >> $GITHUB_OUTPUT
 
       - name: Sync storybook
         uses: ./.github/actions/sync-github-pages
@@ -94,4 +105,5 @@ jobs:
             https://hrsh7th.github.io/frontend-testing-demo/${{ github.head_ref }}/storybook
             #### Visual Regression
             https://hrsh7th.github.io/frontend-testing-demo/${{ github.head_ref }}/vrt
+            ${{ steps.integration.outputs.vrt_summary }}
 

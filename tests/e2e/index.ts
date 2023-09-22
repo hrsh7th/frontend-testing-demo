@@ -9,7 +9,7 @@ const test = base.extend<{
   snapshot: async ({ msw }, use) => {
     const state = { count: 0 }
     use(() => {
-      const updateSnapshot = base.info().config.updateSnapshots !== 'none'
+      const updateSnapshots = base.info().config.updateSnapshots !== 'none'
       const snapshotDir = join(
         dirname(test.info().file),
         '__snapshots__',
@@ -17,7 +17,7 @@ const test = base.extend<{
         // TODO: Use `filenamify` after solving esm import problem.
         test.info().title.replace(/\W/g, '_')
       )
-      if (updateSnapshot) {
+      if (updateSnapshots) {
         rmSync(snapshotDir, {
           recursive: true,
           force: true,
@@ -25,7 +25,7 @@ const test = base.extend<{
       }
       msw.use(
         snapshot({
-          updateSnapshot: updateSnapshot,
+          updateSnapshot: updateSnapshots,
           snapshotDir: snapshotDir,
           createSnapshotName: async () => {
             return state.count++

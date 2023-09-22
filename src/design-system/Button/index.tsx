@@ -6,5 +6,8 @@ export type ButtonProps = {
 }
 
 export function Button(props: ButtonProps) {
-  return <button onClick={props.onClick}>{props.children}</button>;
+  return <button
+    style={{ border: '1px solid #000' }}
+    onClick={props.onClick}
+  >{props.children}</button>;
 }

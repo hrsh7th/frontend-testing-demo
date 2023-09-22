@@ -25,10 +25,6 @@
         "*"
       ],
       [
-        "age",
-        "62618"
-      ],
-      [
         "alt-svc",
         "h3=\":443\"; ma=86400"
       ],
@@ -42,7 +38,7 @@
       ],
       [
         "cf-ray",
-        "80a9d1ee5e0c266a-NRT"
+        "80aae12e5ff9f62d-NRT"
       ],
       [
         "connection",
@@ -58,7 +54,7 @@
       ],
       [
         "date",
-        "Fri, 22 Sep 2023 10:21:15 GMT"
+        "Fri, 22 Sep 2023 13:26:26 GMT"
       ],
       [
         "etag",
@@ -66,7 +62,7 @@
       ],
       [
         "function-execution-id",
-        "vcxhq5sef9u6"
+        "s5xm4y4gu2d7"
       ],
       [
         "nel",
@@ -74,7 +70,7 @@
       ],
       [
         "report-to",
-        "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=qr2tGfO33HnnMKidS7busI1KPoWgHsdblhcrH3ZvGkO%2B760Rdu9JvXh6yPOgVMtZ6A7tcU%2FwAVawPxfEy61D0wN2Lg9ZT%2FfHpmr8sFRWxlhn9ZTZZdMHGmKSYgov\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+        "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=QSzD%2B6usSvURzOSG8bfzkIvgOvj3CrtRZTVjtRziZlrCcF644lv5fnOVQzzHBLMCKUrIKJHefVI0lFm%2BhbCsQ4wC27xWCs%2BscnZ2Smtp6ERjIVaUXVzw76z9ZXna\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
       ],
       [
         "server",
@@ -94,19 +90,19 @@
       ],
       [
         "x-cache-hits",
-        "1"
+        "7"
       ],
       [
         "x-cloud-trace-context",
-        "91de5dabe04e6ab1ae8c33985d461235"
+        "b78773d0d7b97ff5f8d2f7fd73c04593;o=1"
       ],
       [
         "x-country-code",
-        "CA"
+        "ZA"
       ],
       [
         "x-orig-accept-language",
-        "en-GB,en;q=0.5"
+        "en-US"
       ],
       [
         "x-powered-by",
@@ -114,11 +110,11 @@
       ],
       [
         "x-served-by",
-        "cache-yyz4529-YYZ"
+        "cache-jnb7023-JNB"
       ],
       [
         "x-timer",
-        "S1694133051.289045,VS0,VE2"
+        "S1692752312.968499,VS0,VE0"
       ]
     ]
   }
